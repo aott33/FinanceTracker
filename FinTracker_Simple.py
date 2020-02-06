@@ -9,12 +9,16 @@ def main():
 
     """
     capitalCSV = open("../test.csv")
-    capitalReader = csv.reader(capitalCSV)
+    capitalReader = csv.DictReader(capitalCSV, delimiter = ',')
 
-    monthlyTotal = 0;
+    monthlyTotal = 0.0;
 
     for row in capitalReader:
-        print(str(capitalReader.line_num) + ' ' + str(row))       
+        if (row['Debit']== ''):
+            continue
+        else:
+            monthlyTotal += float(row['Debit'])
 
+    print(str(monthlyTotal))
 
 main()
