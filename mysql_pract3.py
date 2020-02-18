@@ -1,4 +1,4 @@
-# Working through the Python MySQL Tutorial - Foreign Keys & Relating Tables
+# Python MySQL Tutorial - Foreign Keys & Relating Tables
 # From Tech With Tim YouTube Channel
 # Link: https://www.youtube.com/watch?v=f7oYCzKuv-w&t=630s
 
