@@ -1,3 +1,7 @@
+# Python MySQL Tutorial - Creating Tables, Inserting & Selecting
+# From Tech With Tim YouTube Channel
+# Link: https://www.youtube.com/watch?v=91iNR0eG8kE&t=636s
+
 import mysql.connector
 from datetime import datetime
 
