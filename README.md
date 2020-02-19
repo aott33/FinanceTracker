@@ -13,3 +13,13 @@ FinTracker_Pandas.py
 mysql_pract1.py, mysql_pract2.py, mysql_pract3.py
 - Tutorial from Tech with Tim
 - Practicing using MySQL
+
+FinTracker.py
+- Asks for mysql user, passwd, and database
+- Creates Database if user requests new database
+- Asks user to import file or input data 
+- Import csv
+- Make csv a tuple
+- Adds Transactions
+- Allows manual input of data
+- Returns total spent and total saved
