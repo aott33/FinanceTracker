@@ -21,7 +21,7 @@
 #
 # Author: Andrew Ott
 
-import pandas
+import pandas as pd
 import mysql.connector
 
 TABLE1 = "Withdrawals"
@@ -29,12 +29,13 @@ TABLE2 = "Deposits"
 COL_HEADERS = ('Date', 'Category', 'Amount')
 
 def main():
-    """Short summary.
+    """Main function
 
-    :return: Description of returned object.
-    :rtype: type
+    :return: Void
+    :rtype: void
 
     """
+    data_prompt()
 
     reply = initial_prompt()
 
@@ -123,5 +124,71 @@ def open_db_prompt():
 
     return host, user, passwd, db
 
+
+def data_prompt():
+    """Prompts user how they would like to input data
+
+    :return: Void.
+    :rtype: void
+
+    """
+    print("---------------------------------------------")
+    print("Input Data Menu")
+    print('''Type:
+    'MANUAL' to enter data manually or
+    'FILE' to upload a csv file''')
+    print("---------------------------------------------")
+
+    reply = ""
+
+    while (reply != "MANUAL" and reply != "FILE"):
+        reply = input ("Would you like to input data manually or from a file?\n")
+        reply = reply.upper()
+
+    if reply == "FILE":
+        file_prompt()
+
+    elif reply == "MANUAL":
+        manual_data_prompt()
+
+def file_prompt():
+    """Prompts user for filename and location.
+
+    :return: Description of returned object.
+    :rtype: type
+
+    """
+    print("---------------------------------------------")
+    print("File Input Menu")
+    print("---------------------------------------------")
+
+    filename = input("Enter filename/relative location:\n")
+
+    process_file(filename)
+
+def process_file(fn):
+    """Opens csv file with Pandas and processes file
+
+    :param type fn: filename to open, input from user.
+    :return: Description of returned object.
+    :rtype: type
+
+    """
+    transactions = pd.read_csv(fn, index_col='Transaction Date',
+                    usecols = ['Transaction Date', 'Category', 'Debit'])
+    transactions = transactions.dropna(subset=['Debit'])
+    print(transactions)
+
+
+def manual_data_prompt():
+    """Short summary.
+
+    :return: Description of returned object.
+    :rtype: type
+
+    """
+    print("---------------------------------------------")
+    print("Manual Data Input Menu")
+    print("---------------------------------------------")
 
 main()
