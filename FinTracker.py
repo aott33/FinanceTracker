@@ -14,19 +14,33 @@
 #   - Withdrawals (TABLE1)
 #   - Deposits (TABLE2)
 #
-# Both of tables have the following headers:
+# TABLE1 and TABLE2 have the following headers:
 #   - Date
 #   - Category
 #   - Amount
+#
+# TABLE3 has the following headers
+#   - Month
+#   - Spent
+#   - Income
+#   - Saved
 #
 # Author: Andrew Ott
 
 import pandas as pd
 import mysql.connector
+from datetime import datetime
 
+# Table constansts
 TABLE1 = "Withdrawals"
 TABLE2 = "Deposits"
-COL_HEADERS = ('Date', 'Category', 'Amount')
+TABLE3 = "Totals"
+TABLE1_Q = "CREATE TABLE " + TABLE1 + "IF NOT EXISTS (withd_id int PRIMARY KEY \
+            AUTO_INCREMENT, Date datetime, Category VARCHAR(50), Amount int)"
+TABLE2_Q = "CREATE TABLE " + TABLE2 + "IF NOT EXISTS (dep_id int PRIMARY KEY \
+            AUTO_INCREMENT, Date datetime, Category VARCHAR(50), Amount int)"
+TABLE3_Q = "CREATE TABLE " + TABLE3 + "IF NOT EXISTS (total_id int PRIMARY KEY \
+            AUTO_INCREMENT, Month VARCHAR(50), Spent int, Income int, Saved int)"
 
 def main():
     """Main function
@@ -106,6 +120,8 @@ def create_db_prompt():
     print("Database Created\n")
     print("---------------------------------------------")
 
+    mycursor =
+
 
 def open_db_prompt():
     """Prompts user for mysql user, passwd, database name
@@ -177,7 +193,6 @@ def process_file(fn):
     transactions = pd.read_csv(fn, index_col='Transaction Date',
                     usecols = ['Transaction Date', 'Category', 'Debit'])
     transactions = transactions.dropna(subset=['Debit'])
-    print(transactions)
 
 
 def manual_data_prompt():

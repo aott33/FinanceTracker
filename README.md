@@ -17,9 +17,14 @@ mysql_pract1.py, mysql_pract2.py, mysql_pract3.py
 FinTracker.py
 - Asks for mysql user, passwd, and database
 - Creates Database if user requests new database
-- Asks user to import file or input data 
+- Asks user to import file or input data
 - Import csv
 - Make csv a tuple
 - Adds Transactions
 - Allows manual input of data
 - Returns total spent and total saved
+
+To Do:
+- Add items from csv file to database
+- Sort database by date and category (Can you sort by two criteria in MySQL?)
+- Create functions to add data manually
