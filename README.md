@@ -25,6 +25,7 @@ FinTracker.py
 - Returns total spent and total saved
 
 To Do:
+- ~~Create function that creates tables if they do not exist~~
 - Add items from csv file to database
 - Sort database by date and category (Can you sort by two criteria in MySQL?)
 - Create functions to add data manually

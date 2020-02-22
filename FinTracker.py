@@ -31,16 +31,29 @@ import pandas as pd
 import mysql.connector
 from datetime import datetime
 
-# Table constansts
-TABLE1 = "Withdrawals"
-TABLE2 = "Deposits"
-TABLE3 = "Totals"
-TABLE1_Q = "CREATE TABLE " + TABLE1 + "IF NOT EXISTS (withd_id int PRIMARY KEY \
-            AUTO_INCREMENT, Date datetime, Category VARCHAR(50), Amount int)"
-TABLE2_Q = "CREATE TABLE " + TABLE2 + "IF NOT EXISTS (dep_id int PRIMARY KEY \
-            AUTO_INCREMENT, Date datetime, Category VARCHAR(50), Amount int)"
-TABLE3_Q = "CREATE TABLE " + TABLE3 + "IF NOT EXISTS (total_id int PRIMARY KEY \
-            AUTO_INCREMENT, Month VARCHAR(50), Spent int, Income int, Saved int)"
+# Table constants
+TABLE1_Q = "CREATE TABLE IF NOT EXISTS Withdrawals\
+            (\
+            with_id int PRIMARY KEY AUTO_INCREMENT,\
+            Date datetime,\
+            Category VARCHAR(50),\
+            Amount int\
+            )"
+TABLE2_Q = "CREATE TABLE IF NOT EXISTS Deposits\
+            (\
+            dep_id int PRIMARY KEY AUTO_INCREMENT,\
+            Date datetime,\
+            Category VARCHAR(50),\
+            Amount int\
+            )"
+TABLE3_Q = "CREATE TABLE IF NOT EXISTS Totals\
+            (\
+            total_id int PRIMARY KEY AUTO_INCREMENT,\
+            Month VARCHAR(50),\
+            Spent int,\
+            Income int,\
+            Saved int\
+            )"
 
 def main():
     """Main function
@@ -49,7 +62,6 @@ def main():
     :rtype: void
 
     """
-    data_prompt()
 
     reply = initial_prompt()
 
@@ -64,6 +76,13 @@ def main():
          passwd = mysql_info[2],
          database = mysql_info[3]
          )
+
+    mycursor = db.cursor()
+
+    create_tables(mycursor)
+
+    data_prompt()
+
 
 
 def initial_prompt():
@@ -120,7 +139,11 @@ def create_db_prompt():
     print("Database Created\n")
     print("---------------------------------------------")
 
-    mycursor =
+
+def create_tables(db_cursor):
+    db_cursor.execute(TABLE1_Q)
+    db_cursor.execute(TABLE2_Q)
+    db_cursor.execute(TABLE3_Q)
 
 
 def open_db_prompt():
@@ -167,6 +190,7 @@ def data_prompt():
     elif reply == "MANUAL":
         manual_data_prompt()
 
+
 def file_prompt():
     """Prompts user for filename and location.
 
@@ -181,6 +205,7 @@ def file_prompt():
     filename = input("Enter filename/relative location:\n")
 
     process_file(filename)
+
 
 def process_file(fn):
     """Opens csv file with Pandas and processes file
