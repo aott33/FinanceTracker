@@ -1,29 +1,29 @@
 # FinTracker.py
 #
 # Prompts user for mysql user, passwd, database
-# Database has two tables:
-# Expenses and Deposits
-# Prompts user to import file or input data
+# Database has three tables:
+#   - Withdrawals, with the following Col Headers:
+#       - Date
+#       - Category
+#       - Amount
+#   - Deposits, with the following Col Headers:
+#       - Date
+#       - Category
+#       - Amount
+#   - Totals, with the following Col Headers:
+#       - Month
+#       - Spent
+#       - Income
+#       - Saved
+# Prompts user to import file or input data manually
 #   - Promts user for filename and location, or
 #   - Prompts user for data
-# Imports data as tuple
-# Inserts Transactions into request table
-# Returns total spent and total saved
-#
-# Two types of tables for this finance tracking database
-#   - Withdrawals (TABLE1)
-#   - Deposits (TABLE2)
-#
-# TABLE1 and TABLE2 have the following headers:
-#   - Date
-#   - Category
-#   - Amount
-#
-# TABLE3 has the following headers
-#   - Month
-#   - Spent
-#   - Income
-#   - Saved
+# Imports data as DataFrame with Pandas Module
+# Inserts Transactions into appropriate table
+# Processes tables and calculates:
+#   - Total Spent
+#   - Total Deposited
+#   - Total Saved
 #
 # Author: Andrew Ott
 
@@ -62,7 +62,6 @@ def main():
     :rtype: void
 
     """
-
     reply = initial_prompt()
 
     if reply == "N":
@@ -81,8 +80,7 @@ def main():
 
     create_tables(mycursor)
 
-    data_prompt()
-
+    data_prompt(db)
 
 
 def initial_prompt():
@@ -141,6 +139,13 @@ def create_db_prompt():
 
 
 def create_tables(db_cursor):
+    """Short summary.
+
+    :param type db_cursor: Description of parameter `db_cursor`.
+    :return: Description of returned object.
+    :rtype: type
+
+    """
     db_cursor.execute(TABLE1_Q)
     db_cursor.execute(TABLE2_Q)
     db_cursor.execute(TABLE3_Q)
@@ -164,7 +169,7 @@ def open_db_prompt():
     return host, user, passwd, db
 
 
-def data_prompt():
+def data_prompt(db):
     """Prompts user how they would like to input data
 
     :return: Void.
@@ -185,13 +190,13 @@ def data_prompt():
         reply = reply.upper()
 
     if reply == "FILE":
-        file_prompt()
+        file_prompt(db)
 
     elif reply == "MANUAL":
-        manual_data_prompt()
+        manual_data_prompt(db)
 
 
-def file_prompt():
+def file_prompt(db):
     """Prompts user for filename and location.
 
     :return: Description of returned object.
@@ -204,11 +209,12 @@ def file_prompt():
 
     filename = input("Enter filename/relative location:\n")
 
-    process_file(filename)
+    process_file(filename, db)
 
 
-def process_file(fn):
-    """Opens csv file with Pandas and processes file
+def process_file(fn, db):
+    """Opens csv file with Pandas and processes file and adds dataframe to
+    database
 
     :param type fn: filename to open, input from user.
     :return: Description of returned object.
@@ -218,6 +224,8 @@ def process_file(fn):
     transactions = pd.read_csv(fn, index_col='Transaction Date',
                     usecols = ['Transaction Date', 'Category', 'Debit'])
     transactions = transactions.dropna(subset=['Debit'])
+
+    transactions.to_sql('Withdrawals', db, if_exists='replace', index = 'false')
 
 
 def manual_data_prompt():
