@@ -30,6 +30,7 @@
 import pandas as pd
 import mysql.connector
 from datetime import datetime
+from sqlalchemy import create_engine
 
 # Table constants
 TABLE1_Q = "CREATE TABLE IF NOT EXISTS Withdrawals\
@@ -209,10 +210,10 @@ def file_prompt(db):
 
     filename = input("Enter filename/relative location:\n")
 
-    process_file(filename, db)
+    process_file(filename)
 
 
-def process_file(fn, db):
+def process_file(fn):
     """Opens csv file with Pandas and processes file and adds dataframe to
     database
 
@@ -225,8 +226,20 @@ def process_file(fn, db):
                     usecols = ['Transaction Date', 'Category', 'Debit'])
     transactions = transactions.dropna(subset=['Debit'])
 
-    transactions.to_sql('Withdrawals', db, if_exists='replace', index = 'false')
+    insert_df(transactions)
 
+
+def insert_df(df):
+    """Short summary.
+
+    :param type df: Description of parameter `df`.
+    :return: Description of returned object.
+    :rtype: type
+
+    """
+    engine = create_engine('mysql+mysqlconnector://andrew:andrew@localhost/testdb')
+
+    df.to_sql(name='Withdrawals',con=engine,if_exists='append',index=False)
 
 def manual_data_prompt():
     """Short summary.
