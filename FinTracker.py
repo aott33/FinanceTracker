@@ -4,10 +4,12 @@
 # Database has three tables:
 #   - Withdrawals, with the following Col Headers:
 #       - Date
+#       - Description
 #       - Category
 #       - Amount
 #   - Deposits, with the following Col Headers:
 #       - Date
+#       - Description
 #       - Category
 #       - Amount
 #   - Totals, with the following Col Headers:
@@ -37,15 +39,17 @@ TABLE1_Q = "CREATE TABLE IF NOT EXISTS Withdrawals\
             (\
             with_id int PRIMARY KEY AUTO_INCREMENT,\
             Date datetime,\
+            Description VARCHAR(50),\
             Category VARCHAR(50),\
-            Amount int\
+            Amount DECIMAL(13,2)\
             )"
 TABLE2_Q = "CREATE TABLE IF NOT EXISTS Deposits\
             (\
             dep_id int PRIMARY KEY AUTO_INCREMENT,\
             Date datetime,\
+            Description VARCHAR(50),\
             Category VARCHAR(50),\
-            Amount int\
+            Amount DECIMAL(13,2)\
             )"
 TABLE3_Q = "CREATE TABLE IF NOT EXISTS Totals\
             (\
@@ -214,18 +218,23 @@ def file_prompt(db):
 
 
 def process_file(fn):
-    """Opens csv file with Pandas and processes file and adds dataframe to
-    database
+    """Opens csv file with Pandas, processes file, and calls insert_df()
 
     :param type fn: filename to open, input from user.
     :return: Description of returned object.
     :rtype: type
 
     """
-    transactions = pd.read_csv(fn, index_col='Transaction Date',
-                    usecols = ['Transaction Date', 'Category', 'Debit'])
+    # reads certain columns from the csv file
+    transactions = pd.read_csv(fn, usecols = ['Transaction Date', 'Description',
+                                             'Category', 'Debit'])
+    # drops any rows where debit column has no data
     transactions = transactions.dropna(subset=['Debit'])
-
+    # renames columns to match table columns in database
+    transactions = transactions.rename(columns = {'Transaction Date': 'Date',
+                                                 'Debit': 'Amount'})
+    # converts date string to datetime object
+    transactions['Date'] = pd.to_datetime(transactions['Date'])
     insert_df(transactions)
 
 

@@ -27,7 +27,8 @@ FinTracker.py
 To Do:
 - ~~Create function that creates database if users requests~~
 - ~~Create function that creates tables if they do not exist~~
+- ~~Add items from csv file to database~~ I used sqlalchemy to create an engine
+- **Change Datetime to show just the date and now time**
 - **Update DocBlocks**
-- **Add items from csv file to database** Do I need SQLAlchemy?
 - Sort database by date and category (Can you sort by two criteria in MySQL?)
 - Create functions to add data manually
