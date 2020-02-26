@@ -85,7 +85,19 @@ def main():
 
     create_tables(mycursor)
 
-    data_prompt(db)
+    more_data = "Y"
+
+    while more_data == "Y":
+        data_prompt(db)
+
+        more_data = input("Would you like to add more data(Y or N)?")
+        more_data = more_data.upper()
+
+        while more_data != "Y" and more_data != "N":
+            more_data = input("Would you like to add more data(Y or N)?")
+            more_data = more_data.upper()
+
+    print("Have a great day")
 
 
 def initial_prompt():
