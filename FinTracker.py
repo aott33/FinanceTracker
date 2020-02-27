@@ -203,7 +203,7 @@ def data_prompt(db):
     reply = ""
 
     while (reply != "MANUAL" and reply != "FILE"):
-        reply = input ("Would you like to input data manually or from a file?\n")
+        reply = input ("Enter data manually or from a file?\n")
         reply = reply.upper()
 
     if reply == "FILE":
