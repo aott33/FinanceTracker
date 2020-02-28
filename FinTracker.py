@@ -81,6 +81,8 @@ def main():
          database = mysql_info[3]
          )
 
+    manual_data_prompt(db)
+
     mycursor = db.cursor()
 
     create_tables(mycursor)
@@ -262,7 +264,7 @@ def insert_df(df):
 
     df.to_sql(name='Withdrawals',con=engine,if_exists='append',index=False)
 
-def manual_data_prompt():
+def manual_data_prompt(db):
     """Short summary.
 
     :return: Description of returned object.
@@ -272,5 +274,20 @@ def manual_data_prompt():
     print("---------------------------------------------")
     print("Manual Data Input Menu")
     print("---------------------------------------------")
+
+    isValidDate = False
+    purch_date = ""
+
+    while not isValidDate:
+        purch_date = input("Enter the date in format 'dd/mm/yy' : ")
+        day,month,year = purch_date.split('/')
+
+        try :
+            temp_date = datetime.datetime(int(year),int(month),int(day))
+            isValidDate = True
+
+        except ValueError :
+            isValidDate = False
+            print ("Input date is not valid..")
 
 main()
