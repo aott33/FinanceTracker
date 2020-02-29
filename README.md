@@ -28,7 +28,12 @@ To Do:
 - ~~Create function that creates database if users requests~~
 - ~~Create function that creates tables if they do not exist~~
 - ~~Add items from csv file to database~~ I used sqlalchemy to create an engine
-- **Fix attribute error in manual_data_prompt()**
+- ~~Fix attribute error in manual_data_prompt()~~
 - Create functions to add data manually
+  - ~~Create get_date() to get date from user~~
+  - Create get_txn_type() to get transaction type, withdrawal or deposit
+  - Create get_category()
+  - Create get_description()
+  - Create get_amount()
 - **Update DocBlocks**
 - Sort database by date and category (Can you sort by two criteria in MySQL?)

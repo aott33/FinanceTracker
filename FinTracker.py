@@ -264,8 +264,9 @@ def insert_df(df):
 
     df.to_sql(name='Withdrawals',con=engine,if_exists='append',index=False)
 
+
 def manual_data_prompt(db):
-    """Short summary.
+    """Prompts user for the transaction data
 
     :return: Description of returned object.
     :rtype: type
@@ -275,19 +276,48 @@ def manual_data_prompt(db):
     print("Manual Data Input Menu")
     print("---------------------------------------------")
 
+    txn_type = get_txn_type()
+    purch_date = get_date()
+    print(purch_date)
+
+
+def get_date():
+    """Prompts user for transaction date, keeps looping until the user
+    enters the correct format and correct requested date.
+
+    :return: datetime object for database.
+    :rtype: datetime.datetime
+
+    """
+    requestedDate = "N"
     isValidDate = False
     purch_date = ""
 
-    while not isValidDate:
-        purch_date = input("Enter the date in format 'dd/mm/yy' : ")
-        day,month,year = purch_date.split('/')
+    # Loops until the user confirms that the date entered is what is requested
+    while requestedDate == "N":
+        requestedDate = ""
+        isValidDate = False
 
-        try :
-            temp_date = datetime.datetime(int(year),int(month),int(day))
-            isValidDate = True
+        # Loops until user enters a valid date in format 'dd-mm-yyyy'
+        while not isValidDate:
 
-        except ValueError :
-            isValidDate = False
-            print ("Input date is not valid..")
+            purch_date_ip = input("Enter the date in format 'dd-mm-yyyy' : ")
+
+            # Trys converting user input to a datetime object
+            try:
+                purch_date = datetime.strptime(purch_date_ip, "%d-%m-%Y")
+                isValidDate = True
+
+            # catches the exception and prints message for user
+            except ValueError:
+                print("Wrong format, please enter the correct format.")
+
+        # Loops until user enters either "y", "Y", "n", or "N"
+        while requestedDate != "Y" and requestedDate != "N":
+            print("Date entered: ", purch_date)
+            requestedDate = input("Correct date (Y or N)? ")
+            requestedDate = requestedDate.upper()
+
+    return purch_date
 
 main()
