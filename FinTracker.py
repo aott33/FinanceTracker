@@ -123,7 +123,7 @@ def initial_prompt():
 
     # prompts until user enters a valid response
     while (reply != "Y" and reply != "N"):
-        reply = input("Do you have an existing database(Y on N)? ")
+        reply = input("Do you have an existing database(Y on N)?\n")
         reply = reply.upper()
 
     return reply
@@ -266,7 +266,7 @@ def insert_df(df):
 
 
 def manual_data_prompt(db):
-    """Prompts user for the transaction data
+    """Prompts user for the transaction data. If data is valid, adds it to table
 
     :return: Description of returned object.
     :rtype: type
@@ -277,11 +277,86 @@ def manual_data_prompt(db):
     print("---------------------------------------------")
 
     txn_type = get_txn_type()
-    purch_date = get_date()
-    print(purch_date)
+    txn_date = get_txn_date()
+    txn_cat = get_txn_cat()
+    txn_desc = get_txn_desc()
+    txn_amnt = get_txn_amnt()
 
 
-def get_date():
+def get_txn_type():
+    """Prompts user for transaction type.
+
+    :return: The transaction type to match table (Withdrawals or Deposits).
+    :rtype: string
+
+    """
+    print("Transaction type:")
+
+    reply = ""
+
+    while (reply != "W" and reply != "D"):
+        reply = input("W - Withdrawal, D - Deposit: ")
+        reply = reply.upper()
+
+    if reply == "W":
+        reply == "Withdrawals"
+
+    elif reply == "D":
+        repy == "Deposits"
+
+    return reply
+
+def get_txn_cat():
+    """Prompts user for transaction category (ex. Groceries).
+
+    :return: The transaction category.
+    :rtype: string
+
+    """
+    txn_cat = input("Transaction Category(ex. Groceries):\n")
+    txn_cat = txn_cat.upper()
+
+    return txn_cat
+
+
+def get_txn_desc():
+    """Prompts user for a brief transaction description (ex. Location).
+
+    :return: The transaction description.
+    :rtype: string
+
+    """
+    desc_len = 16
+
+    while desc_len > 15:
+        txn_desc = input("Enter transaction description (max 15 characters):\n")
+        txn_desc = txn_desc.upper()
+        desc_len = len(txn_desc)
+
+        if(desc_len > 15):
+            print("*ERROR: String length too long.*")
+
+    return txn_desc
+
+def get_txn_amnt():
+    """Prompts user for transaction amount and it must be greater than 0.0.
+
+    :return: Transaction amount with precision of 2 decimal places.
+    :rtype: float
+
+    """
+    amnt = 0.0
+
+    while amnt <= 0.0:
+        print("Enter transaction amount (greater than 0)")
+        amnt = float(input("Amount: "))
+
+    amnt = '%.2f' % amnt
+
+    return amnt
+
+
+def get_txn_date():
     """Prompts user for transaction date, keeps looping until the user
     enters the correct format and correct requested date.
 
@@ -291,7 +366,7 @@ def get_date():
     """
     requestedDate = "N"
     isValidDate = False
-    purch_date = ""
+    txn_date = ""
 
     # Loops until the user confirms that the date entered is what is requested
     while requestedDate == "N":
@@ -301,11 +376,11 @@ def get_date():
         # Loops until user enters a valid date in format 'dd-mm-yyyy'
         while not isValidDate:
 
-            purch_date_ip = input("Enter the date in format 'dd-mm-yyyy' : ")
+            purch_date_ip = input("Transaction date in format 'dd-mm-yyyy' : ")
 
             # Trys converting user input to a datetime object
             try:
-                purch_date = datetime.strptime(purch_date_ip, "%d-%m-%Y")
+                txn_date = datetime.strptime(purch_date_ip, "%d-%m-%Y")
                 isValidDate = True
 
             # catches the exception and prints message for user
@@ -314,10 +389,10 @@ def get_date():
 
         # Loops until user enters either "y", "Y", "n", or "N"
         while requestedDate != "Y" and requestedDate != "N":
-            print("Date entered: ", purch_date)
+            print("Date entered: ", txn_date)
             requestedDate = input("Correct date (Y or N)? ")
             requestedDate = requestedDate.upper()
 
-    return purch_date
+    return txn_date
 
 main()

@@ -29,11 +29,13 @@ To Do:
 - ~~Create function that creates tables if they do not exist~~
 - ~~Add items from csv file to database~~ I used sqlalchemy to create an engine
 - ~~Fix attribute error in manual_data_prompt()~~
-- Create functions to add data manually
-  - ~~Create get_date() to get date from user~~
-  - Create get_txn_type() to get transaction type, withdrawal or deposit
-  - Create get_category()
-  - Create get_description()
-  - Create get_amount()
+- ~~Create functions to get data from user~~
+  - ~~Create get_txn_date() to get date from user~~
+  - ~~Create get_txn_type() to get transaction type, withdrawal or deposit~~
+  - ~~Create get_txn_cat()~~
+  - ~~Create get_txn_desc()~~
+  - ~~Create get_txn_amnt()~~
 - **Update DocBlocks**
+- Add user's individual transaction to the correct table
+- Try except statement for user login - if login is wrong re-prompt user
 - Sort database by date and category (Can you sort by two criteria in MySQL?)
