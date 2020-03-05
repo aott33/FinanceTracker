@@ -282,6 +282,8 @@ def manual_data_prompt(db):
     txn_desc = get_txn_desc()
     txn_amnt = get_txn_amnt()
 
+    mycursor = db.cursor()
+
 
 def get_txn_type():
     """Prompts user for transaction type.
