@@ -72,14 +72,21 @@ def main():
     if reply == "N":
         create_db_prompt()
 
-    mysql_info = open_db_prompt()
+    while True:
+        try:
+            mysql_info = open_db_prompt()
 
-    db = mysql.connector.connect(
-         host = mysql_info[0],
-         user = mysql_info[1],
-         passwd = mysql_info[2],
-         database = mysql_info[3]
-         )
+            db = mysql.connector.connect(
+                 host = mysql_info[0],
+                 user = mysql_info[1],
+                 passwd = mysql_info[2],
+                 database = mysql_info[3]
+                 )
+        except mysql.connector.Error:
+            print("Login information is incorrect, try again")
+            continue
+        else:
+            break
 
     manual_data_prompt(db)
 
@@ -139,16 +146,24 @@ def create_db_prompt():
     print("---------------------------------------------")
     print("Create Database")
     print("---------------------------------------------")
-    host = input("Enter hostname: ")
-    user = input("Enter username: ")
-    passwd = input("Enter passwd: databases")
-    new_db = input("Enter new database name: ")
 
-    db = mysql.connector.connect(
-         host = host,
-         user = user,
-         passwd = passwd,
-         )
+    while True:
+        try:
+            host = input("Enter hostname: ")
+            user = input("Enter username: ")
+            passwd = input("Enter passwd: databases")
+            new_db = input("Enter new database name: ")
+
+            db = mysql.connector.connect(
+                 host = host,
+                 user = user,
+                 passwd = passwd,
+                 )
+        except mysql.connector.Error:
+            print("Login information is incorrect, try again")
+            continue
+        else:
+            break
 
     mycursor = db.cursor()
     mycursor.execute("CREATE DATABASE IF NOT EXISTS " + new_db)
@@ -268,8 +283,8 @@ def insert_df(df):
 def manual_data_prompt(db):
     """Prompts user for the transaction data. If data is valid, adds it to table
 
-    :return: Description of returned object.
-    :rtype: type
+    :return: void
+    :rtype: Void
 
     """
     print("---------------------------------------------")
@@ -278,11 +293,23 @@ def manual_data_prompt(db):
 
     txn_type = get_txn_type()
     txn_date = get_txn_date()
-    txn_cat = get_txn_cat()
     txn_desc = get_txn_desc()
+    txn_cat = get_txn_cat()
     txn_amnt = get_txn_amnt()
 
+    txn_list = (txn_date, txn_desc, txn_cat, txn_amnt)
+
     mycursor = db.cursor()
+
+    data_q= "INSERT INTO " + txn_type + " (Date, Description, Category, Amount)"\
+            + " VALUES(%s, %s, %s, %s)"
+
+    mycursor.execute(data_q, txn_list)
+
+    #temp - prints the table that user inputs data into
+    mycursor.execute("SELECT * FROM " + txn_type)
+    for x in mycursor:
+        print(x)
 
 
 def get_txn_type():
@@ -301,10 +328,10 @@ def get_txn_type():
         reply = reply.upper()
 
     if reply == "W":
-        reply == "Withdrawals"
+        reply = "Withdrawals"
 
     elif reply == "D":
-        repy == "Deposits"
+        repy = "Deposits"
 
     return reply
 
@@ -331,7 +358,7 @@ def get_txn_desc():
     desc_len = 16
 
     while desc_len > 15:
-        txn_desc = input("Enter transaction description (max 15 characters):\n")
+        txn_desc = input("Transaction description/location (max 15 characters):\n")
         txn_desc = txn_desc.upper()
         desc_len = len(txn_desc)
 
@@ -350,8 +377,12 @@ def get_txn_amnt():
     amnt = 0.0
 
     while amnt <= 0.0:
-        print("Enter transaction amount (greater than 0)")
-        amnt = float(input("Amount: "))
+        try:
+            print("Enter transaction amount (greater than 0)")
+            amnt = float(input("Amount: "))
+        except ValueError:
+            print("Enter valid monetary value")
+            continue
 
     amnt = '%.2f' % amnt
 

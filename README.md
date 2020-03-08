@@ -35,7 +35,10 @@ To Do:
   - ~~Create get_txn_cat()~~
   - ~~Create get_txn_desc()~~
   - ~~Create get_txn_amnt()~~
-- **Update DocBlocks**
-- Add user's individual transaction to the correct table
-- Try except statement for user login - if login is wrong re-prompt user
+  - ~~Add user's individual transaction to the correct table~~
+  - ~~Ensure that program does not crash if user enters incorrect money value~~
+- ~~Try except statement for user login - if login is wrong re-prompt user~~
+- Calculate totals(monthly) in tables and add to the Totals table
+- Print table showing amount withdrawn, amount deposited, amount saved
 - Sort database by date and category (Can you sort by two criteria in MySQL?)
+- **Update DocBlocks**
